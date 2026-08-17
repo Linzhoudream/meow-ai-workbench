@@ -1558,7 +1558,7 @@ function confirmDelete(key,id){ const item=(data[key]||[]).find(i=>i.id==id); if
 /* ---------- router / sidebar ---------- */
 function dateStr(){ const n=new Date(); const wd="日一二三四五六"[n.getDay()]; return `${n.getFullYear()}年${n.getMonth()+1}月${n.getDate()}日 周${wd}`; }
 function go(v){ view=v; searchQ=""; renderNavActive(); render(); window.scrollTo({top:0}); }
-function render(){ if(view==="home") renderHome(); else if(view==="insight") renderInsight(); else if(view==="ai-team") renderAIHome(); else if(view==="discuss") renderDiscuss(); else renderModule(view); }
+function render(){ if(view==="home") renderHome(); else if(view==="insight") renderInsight(); else if(view==="ai-team") renderAIHome(); else if(view==="discuss") renderDiscuss(); else if(view==="feishu") renderFeishu(); else renderModule(view); }
 
 function buildNav(){
   $("#brandName").textContent=CONFIG.owner; $("#brandSlogan").textContent=CONFIG.slogan;
@@ -1568,6 +1568,7 @@ function buildNav(){
     .concat([`<div class="nav-sep">AI 协作</div>`,
       `<div class="navi" data-go="ai-team">${icon("users",19)}AI团队</div>`,
       `<div class="navi" data-go="discuss">${icon("message",19)}讨论区</div>`])
+    .concat([`<div class="nav-sep">飞书集成</div>`, `<div class="navi" data-go="feishu">${icon("link",19)}飞书工作台</div>`])
     .concat([`<div class="nav-sep">统计</div>`, `<div class="navi" data-go="insight">${icon("chart",19)}洞察复盘</div>`])
     .concat([renderSidebarActions()]);
   $("#nav").innerHTML=html.join("");
@@ -1760,6 +1761,86 @@ function renderWeeklyReview(){
   }
 
   $("#screen").innerHTML = html;
+}
+
+/* ---------- 飞书集成样式 ---------- */
+.feishu-card { background:var(--surface-card); border-radius:var(--radius-card); padding:24px; margin-bottom:16px; box-shadow:var(--shadow-card); }
+.feishu-card h3 { font-size:16px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+.feishu-card .f-desc { font-size:13px; color:var(--text-secondary); margin-bottom:16px; line-height:1.6; }
+.feishu-link-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; background:var(--accent); color:var(--on-accent); border-radius:var(--radius-tile); text-decoration:none; font-size:14px; font-weight:600; transition:opacity .15s; }
+.feishu-link-btn:hover { opacity:.85; }
+.feishu-event { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--surface-nested); border-radius:var(--radius-tile); margin-bottom:8px; }
+.feishu-event .fe-time { font-size:13px; font-weight:700; color:var(--accent); min-width:100px; }
+.feishu-event .fe-title { font-size:14px; font-weight:600; flex:1; }
+.feishu-event .fe-status { font-size:12px; padding:3px 10px; border-radius:999px; background:var(--module-1); color:#fff; }
+.feishu-step { background:var(--surface-nested); border-radius:var(--radius-tile); padding:16px; }
+.feishu-step .step-num { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:var(--on-accent); font-size:12px; font-weight:800; margin-bottom:8px; }
+.feishu-step h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+.feishu-step p { font-size:12px; color:var(--text-secondary); line-height:1.5; }
+
+/* ---------- 飞书集成页面 ---------- */
+function renderFeishu(){
+  const docUrl = "https://tcndao0fp7lq.feishu.cn/docx/V7kadWUYmortM7xAnLXcIvZxnbb";
+  const dashUrl = "https://linzhoudream.github.io/meow-ai-workbench/workbench-desktop.html";
+  const today = new Date();
+  const wd = "日一二三四五六"[today.getDay()];
+  const dateStr2 = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日 周${wd}`;
+  
+  $("#screen").innerHTML = `
+    <div class="header"><div><h2>飞书集成</h2><p>猫咪报工作台 × 飞书 · 日历/待办已打通</p></div><div class="spacer"></div><span class="date-chip">${icon("link",14)} ${dateStr2}</span></div>
+    
+    <div class="feishu-card">
+      <h3>${icon("link",18)} 飞书文档 · 工作台入口</h3>
+      <div class="f-desc">已创建专属飞书文档，包含工作台链接、日历和待办数据，可在飞书内直接打开。</div>
+      <a href="${docUrl}" target="_blank" class="feishu-link-btn">${icon("external",16)} 打开飞书工作台文档</a>
+      <span style="margin-left:12px;font-size:13px;color:var(--text-secondary);">或直接打开 → <a href="${dashUrl}" target="_blank" style="color:var(--accent);">工作台原文</a></span>
+    </div>
+
+    <div class="feishu-card">
+      <h3>${icon("calendar",18)} 今日日程 · ${dateStr2}</h3>
+      <div class="f-desc">以下数据来自飞书日历，实时同步。</div>
+      <div class="feishu-event">
+        <span class="fe-time">08:00 - 08:15</span>
+        <span class="fe-title">【AI编辑部】晨间全局巡检</span>
+        <span class="fe-status done">✅ 已完成</span>
+      </div>
+      <div style="margin-top:12px;padding:12px 16px;background:var(--surface-nested);border-radius:var(--radius-tile);font-size:13px;color:var(--text-secondary);">
+        ${icon("info",14)} 暂无更多日程。在飞书日历中创建新日程后，刷新本页即可同步。
+      </div>
+    </div>
+
+    <div class="feishu-card">
+      <h3>${icon("list",18)} 飞书待办</h3>
+      <div class="f-desc">以下数据来自飞书待办，实时同步。</div>
+      <div style="padding:16px;text-align:center;color:var(--text-secondary);font-size:14px;">
+        ${icon("check",24)}<br><br>
+        暂无待办任务，当前状态：✅ 全部完成
+      </div>
+      <div style="margin-top:12px;padding:12px 16px;background:var(--surface-nested);border-radius:var(--radius-tile);font-size:13px;color:var(--text-secondary);">
+        ${icon("info",14)} 在飞书「待办」中创建任务后，刷新本页即可同步。
+      </div>
+    </div>
+
+    <div class="feishu-card">
+      <h3>${icon("settings",18)} 如何将工作台固定在飞书侧边栏？</h3>
+      <div class="f-desc">按照以下步骤操作，即可从飞书侧边栏一键打开工作台。</div>
+      <div class="feishu-step" style="margin-bottom:8px;">
+        <div class="step-num">1</div>
+        <h4>打开工作台链接</h4>
+        <p>点击上方「打开飞书工作台文档」按钮，或直接访问飞书文档。</p>
+      </div>
+      <div class="feishu-step" style="margin-bottom:8px;">
+        <div class="step-num">2</div>
+        <h4>添加到飞书侧边栏</h4>
+        <p>在飞书桌面端，点击左侧「更多」→「添加自定义链接」，粘贴工作台 URL。</p>
+      </div>
+      <div class="feishu-step" style="margin-bottom:8px;">
+        <div class="step-num">3</div>
+        <h4>命名并保存</h4>
+        <p>名称填写「猫咪报工作台」，链接填写工作台地址，保存后即可从侧边栏一键访问。</p>
+      </div>
+    </div>
+  `;
 }
 
 /* ---------- 导出/导入按钮（侧栏底部） ---------- */
