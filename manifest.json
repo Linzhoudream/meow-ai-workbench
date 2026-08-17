@@ -1,0 +1,22 @@
+{
+  "name": "猫咪报 · 林舟编辑部",
+  "short_name": "猫咪报编辑部",
+  "description": "一人公司 · 箱包电商 · 每日更新",
+  "start_url": "workbench-desktop.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f0e7",
+  "theme_color": "#3d2e1f",
+  "icons": [
+    {
+      "src": "assets/icon-192.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "assets/icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
