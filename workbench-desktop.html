@@ -1881,6 +1881,7 @@ function addSessionLog(type){
 function renderFeishu(){
   const docUrl = "https://tcndao0fp7lq.feishu.cn/docx/V7kadWUYmortM7xAnLXcIvZxnbb";
   const dashUrl = "https://linzhoudream.github.io/meow-ai-workbench/workbench-desktop.html";
+  const tdUrl = "https://docs.qq.com/aio/DUE1rZUNzempzTmxa";
   const today = new Date();
   const wd = "日一二三四五六"[today.getDay()];
   const dateStr2 = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日 周${wd}`;
@@ -1893,6 +1894,13 @@ function renderFeishu(){
       <div class="f-desc">已创建专属飞书文档，包含工作台链接、日历和待办数据，可在飞书内直接打开。</div>
       <a href="${docUrl}" target="_blank" class="feishu-link-btn">${icon("external",16)} 打开飞书工作台文档</a>
       <span style="margin-left:12px;font-size:13px;color:var(--text-secondary);">或直接打开 → <a href="${dashUrl}" target="_blank" style="color:var(--accent);">工作台原文</a></span>
+    </div>
+
+    <div class="feishu-card">
+      <h3>${icon("file",18)} 腾讯文档 · 工作台中枢</h3>
+      <div class="f-desc">完整的猫咪报工作台已放入腾讯智能文档，含团队看板、五大模块数据、讨论区记录和对比分析。Trae 可以直接编辑此文，AI 团队也能看到。</div>
+      <a href="${tdUrl}" target="_blank" class="feishu-link-btn" style="background:var(--module-3);">${icon("external",16)} 打开腾讯文档工作台</a>
+      <span style="margin-left:12px;font-size:13px;color:var(--text-secondary);">支持协作 · 云端备份 · AI 可写</span>
     </div>
 
     <div class="feishu-card">
